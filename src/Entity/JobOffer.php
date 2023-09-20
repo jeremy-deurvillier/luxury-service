@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\JobOfferRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -44,6 +46,17 @@ class JobOffer
     #[ORM\ManyToOne(inversedBy: 'jobOffers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?JobCategory $jobCategory = null;
+
+    #[ORM\ManyToOne(inversedBy: 'jobOffers')]
+    private ?Client $clients = null;
+
+    #[ORM\ManyToMany(targetEntity: Candidate::class, mappedBy: 'jobOffers')]
+    private Collection $candidates;
+
+    public function __construct()
+    {
+        $this->candidates = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -166,6 +179,45 @@ class JobOffer
     public function setJobCategory(?JobCategory $jobCategory): static
     {
         $this->jobCategory = $jobCategory;
+
+        return $this;
+    }
+
+    public function getClients(): ?Client
+    {
+        return $this->clients;
+    }
+
+    public function setClients(?Client $clients): static
+    {
+        $this->clients = $clients;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Candidate>
+     */
+    public function getCandidates(): Collection
+    {
+        return $this->candidates;
+    }
+
+    public function addCandidate(Candidate $candidate): static
+    {
+        if (!$this->candidates->contains($candidate)) {
+            $this->candidates->add($candidate);
+            $candidate->addJobOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidate(Candidate $candidate): static
+    {
+        if ($this->candidates->removeElement($candidate)) {
+            $candidate->removeJobOffer($this);
+        }
 
         return $this;
     }

@@ -46,9 +46,13 @@ class Client
     #[ORM\Column]
     private ?\DateTimeImmutable $deletedAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'clients', targetEntity: JobOffer::class)]
+    private Collection $jobOffers;
+
     public function __construct()
     {
         $this->typeActivity = new ArrayCollection();
+        $this->jobOffers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -184,6 +188,36 @@ class Client
     public function setDeletedAt(\DateTimeImmutable $deletedAt): static
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JobOffer>
+     */
+    public function getJobOffers(): Collection
+    {
+        return $this->jobOffers;
+    }
+
+    public function addJobOffer(JobOffer $jobOffer): static
+    {
+        if (!$this->jobOffers->contains($jobOffer)) {
+            $this->jobOffers->add($jobOffer);
+            $jobOffer->setClients($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobOffer(JobOffer $jobOffer): static
+    {
+        if ($this->jobOffers->removeElement($jobOffer)) {
+            // set the owning side to null (unless already changed)
+            if ($jobOffer->getClients() === $this) {
+                $jobOffer->setClients(null);
+            }
+        }
 
         return $this;
     }
