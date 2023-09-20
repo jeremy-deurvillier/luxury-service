@@ -70,12 +70,12 @@ class Candidate
     #[ORM\ManyToOne(inversedBy: 'candidates')]
     private ?JobCategory $jobCategory = null;
 
-    #[ORM\ManyToMany(targetEntity: JobOffer::class, inversedBy: 'candidates')]
-    private Collection $jobOffers;
+    #[ORM\OneToMany(mappedBy: 'candidate', targetEntity: Candidacy::class)]
+    private Collection $candidacies;
 
     public function __construct()
     {
-        $this->jobOffers = new ArrayCollection();
+        $this->candidacies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -300,25 +300,31 @@ class Candidate
     }
 
     /**
-     * @return Collection<int, JobOffer>
+     * @return Collection<int, Candidacy>
      */
-    public function getJobOffers(): Collection
+    public function getCandidacies(): Collection
     {
-        return $this->jobOffers;
+        return $this->candidacies;
     }
 
-    public function addJobOffer(JobOffer $jobOffer): static
+    public function addCandidacy(Candidacy $candidacy): static
     {
-        if (!$this->jobOffers->contains($jobOffer)) {
-            $this->jobOffers->add($jobOffer);
+        if (!$this->candidacies->contains($candidacy)) {
+            $this->candidacies->add($candidacy);
+            $candidacy->setCandidate($this);
         }
 
         return $this;
     }
 
-    public function removeJobOffer(JobOffer $jobOffer): static
+    public function removeCandidacy(Candidacy $candidacy): static
     {
-        $this->jobOffers->removeElement($jobOffer);
+        if ($this->candidacies->removeElement($candidacy)) {
+            // set the owning side to null (unless already changed)
+            if ($candidacy->getCandidate() === $this) {
+                $candidacy->setCandidate(null);
+            }
+        }
 
         return $this;
     }
