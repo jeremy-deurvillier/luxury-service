@@ -38,11 +38,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $deletedAt = null;
-
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Candidate $candidate = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deletedAt = null;
 
     public function getId(): ?int
     {
@@ -150,18 +150,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDeletedAt(): ?\DateTimeImmutable
-    {
-        return $this->deletedAt;
-    }
-
-    public function setDeletedAt(\DateTimeImmutable $deletedAt): static
-    {
-        $this->deletedAt = $deletedAt;
-
-        return $this;
-    }
-
     public function getCandidate(): ?Candidate
     {
         return $this->candidate;
@@ -170,6 +158,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCandidate(?Candidate $candidate): static
     {
         $this->candidate = $candidate;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTimeImmutable $deletedAt): static
+    {
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }

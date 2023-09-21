@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Candidate;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,10 +26,15 @@ class RegistrationController extends AbstractController
     ): Response {
 
         if ($this->getUser()) {
+            $isAdmin = $this->isGranted('ROLE_ADMIN');
+
+            if ($isAdmin) return $this->redirectToRoute('admin');
+
             return $this->redirectToRoute('app_home');
         }
 
         $user = new User();
+        $candidate = new Candidate();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -40,10 +47,24 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $nickname = explode('@', $form->get('email')->getData())[0];
+            $user->setNickname($nickname);
+
+            $candidate->setAvailable(false);
+            $candidate->setEmailConfirmed(false);
+
+            $user->setCandidate($candidate);
+
+            $user->setCreatedAt(new DateTimeImmutable());
+            $user->setUpdatedAt(new DateTimeImmutable());
+
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
-            $email = (new Email())
+
+            /* ***** NPO : REACTIVATE EMAIL SEND ***** */
+
+            /*$email = (new Email())
                 ->from('registration-service@luxury-service.dev.local')
                 ->to($user->getEmail())
                 //->cc('cc@example.com')
@@ -57,7 +78,7 @@ class RegistrationController extends AbstractController
                     <p>Vous êtes maintenant membre de Luxury Service.</p>
                 ');
 
-            $mailer->send($email);
+            $mailer->send($email);*/
 
             return $this->redirectToRoute('app_login');
         }
