@@ -47,11 +47,12 @@ class JobOffer
     #[ORM\JoinColumn(nullable: false)]
     private ?JobCategory $jobCategory = null;
 
-    #[ORM\ManyToOne(inversedBy: 'jobOffers')]
-    private ?Client $clients = null;
-
     #[ORM\OneToMany(mappedBy: 'jobOffer', targetEntity: Candidacy::class)]
     private Collection $candidacies;
+
+    #[ORM\ManyToOne(inversedBy: 'jobOffers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
 
     public function __construct()
     {
@@ -183,18 +184,6 @@ class JobOffer
         return $this;
     }
 
-    public function getClients(): ?Client
-    {
-        return $this->clients;
-    }
-
-    public function setClients(?Client $clients): static
-    {
-        $this->clients = $clients;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Candidacy>
      */
@@ -221,6 +210,18 @@ class JobOffer
                 $candidacy->setJobOffer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }

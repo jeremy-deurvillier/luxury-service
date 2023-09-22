@@ -43,10 +43,10 @@ class Client
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deletedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'clients', targetEntity: JobOffer::class)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: JobOffer::class)]
     private Collection $jobOffers;
 
     public function __construct()
@@ -185,7 +185,7 @@ class Client
         return $this->deletedAt;
     }
 
-    public function setDeletedAt(\DateTimeImmutable $deletedAt): static
+    public function setDeletedAt(?\DateTimeImmutable $deletedAt): static
     {
         $this->deletedAt = $deletedAt;
 
@@ -204,7 +204,7 @@ class Client
     {
         if (!$this->jobOffers->contains($jobOffer)) {
             $this->jobOffers->add($jobOffer);
-            $jobOffer->setClients($this);
+            $jobOffer->setClient($this);
         }
 
         return $this;
@@ -214,8 +214,8 @@ class Client
     {
         if ($this->jobOffers->removeElement($jobOffer)) {
             // set the owning side to null (unless already changed)
-            if ($jobOffer->getClients() === $this) {
-                $jobOffer->setClients(null);
+            if ($jobOffer->getClient() === $this) {
+                $jobOffer->setClient(null);
             }
         }
 

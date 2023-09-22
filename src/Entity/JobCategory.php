@@ -18,20 +18,20 @@ class JobCategory
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'jobCategory', targetEntity: Candidate::class)]
-    private Collection $candidates;
-
     #[ORM\OneToMany(mappedBy: 'jobCategory', targetEntity: JobOffer::class)]
     private Collection $jobOffers;
 
     #[ORM\ManyToMany(targetEntity: Client::class, mappedBy: 'typeActivity')]
     private Collection $clients;
 
+    #[ORM\ManyToMany(targetEntity: Candidate::class, mappedBy: 'jobCategories')]
+    private Collection $candidates;
+
     public function __construct()
     {
-        $this->candidates = new ArrayCollection();
         $this->jobOffers = new ArrayCollection();
         $this->clients = new ArrayCollection();
+        $this->candidates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -47,36 +47,6 @@ class JobCategory
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Candidate>
-     */
-    public function getCandidates(): Collection
-    {
-        return $this->candidates;
-    }
-
-    public function addCandidate(Candidate $candidate): static
-    {
-        if (!$this->candidates->contains($candidate)) {
-            $this->candidates->add($candidate);
-            $candidate->setJobCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCandidate(Candidate $candidate): static
-    {
-        if ($this->candidates->removeElement($candidate)) {
-            // set the owning side to null (unless already changed)
-            if ($candidate->getJobCategory() === $this) {
-                $candidate->setJobCategory(null);
-            }
-        }
 
         return $this;
     }
@@ -133,6 +103,33 @@ class JobCategory
     {
         if ($this->clients->removeElement($client)) {
             $client->removeTypeActivity($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Candidate>
+     */
+    public function getCandidates(): Collection
+    {
+        return $this->candidates;
+    }
+
+    public function addCandidate(Candidate $candidate): static
+    {
+        if (!$this->candidates->contains($candidate)) {
+            $this->candidates->add($candidate);
+            $candidate->addJobCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidate(Candidate $candidate): static
+    {
+        if ($this->candidates->removeElement($candidate)) {
+            $candidate->removeJobCategory($this);
         }
 
         return $this;

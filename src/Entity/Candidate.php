@@ -67,15 +67,16 @@ class Candidate
     #[ORM\Column]
     private ?bool $available = null;
 
-    #[ORM\ManyToOne(inversedBy: 'candidates')]
-    private ?JobCategory $jobCategory = null;
-
     #[ORM\OneToMany(mappedBy: 'candidate', targetEntity: Candidacy::class)]
     private Collection $candidacies;
+
+    #[ORM\ManyToMany(targetEntity: JobCategory::class, inversedBy: 'candidates')]
+    private Collection $jobCategories;
 
     public function __construct()
     {
         $this->candidacies = new ArrayCollection();
+        $this->jobCategories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -287,18 +288,6 @@ class Candidate
         return $this;
     }
 
-    public function getJobCategory(): ?JobCategory
-    {
-        return $this->jobCategory;
-    }
-
-    public function setJobCategory(?JobCategory $jobCategory): static
-    {
-        $this->jobCategory = $jobCategory;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Candidacy>
      */
@@ -325,6 +314,30 @@ class Candidate
                 $candidacy->setCandidate(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JobCategory>
+     */
+    public function getJobCategories(): Collection
+    {
+        return $this->jobCategories;
+    }
+
+    public function addJobCategory(JobCategory $jobCategory): static
+    {
+        if (!$this->jobCategories->contains($jobCategory)) {
+            $this->jobCategories->add($jobCategory);
+        }
+
+        return $this;
+    }
+
+    public function removeJobCategory(JobCategory $jobCategory): static
+    {
+        $this->jobCategories->removeElement($jobCategory);
 
         return $this;
     }
