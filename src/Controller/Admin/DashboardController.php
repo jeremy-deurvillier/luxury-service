@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Client;
 use App\Entity\JobCategory;
+use App\Entity\JobOffer;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -45,6 +46,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Clients', 'fa fa-building', Client::class);
         yield MenuItem::linkToCrud('Job Categories', 'fa fa-filter', JobCategory::class);
+        yield MenuItem::linkToCrud('Job Offers', 'fa fa-briefcase', JobOffer::class);
 
     }
 }

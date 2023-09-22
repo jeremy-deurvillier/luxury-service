@@ -15,6 +15,10 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        if ($this->getUser() && $this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('admin');
+        }
+
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
         ]);
