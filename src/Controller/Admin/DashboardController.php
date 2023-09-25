@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Candidacy;
+use App\Entity\Candidate;
 use App\Entity\Client;
 use App\Entity\JobCategory;
 use App\Entity\JobOffer;
@@ -43,10 +45,21 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Clients', 'fa fa-building', Client::class);
-        yield MenuItem::linkToCrud('Job Categories', 'fa fa-filter', JobCategory::class);
-        yield MenuItem::linkToCrud('Job Offers', 'fa fa-briefcase', JobOffer::class);
+        yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
 
+        yield MenuItem::section('Clients');
+        yield MenuItem::linkToCrud('Tous les clients', 'fa fa-building', Client::class);
+
+        yield MenuItem::section('Offres d\'emploi');
+        yield MenuItem::linkToCrud('Toutes les offres', 'fa fa-briefcase', JobOffer::class);
+
+        yield MenuItem::section('Catégories');
+        yield MenuItem::linkToCrud('Toutes les catégories', 'fa fa-filter', JobCategory::class);
+
+        yield MenuItem::section('Candidats');
+        yield MenuItem::linkToCrud('Tous les candidats', 'fa fa-user', Candidate::class);
+
+        yield MenuItem::section('Candidatures');
+        yield MenuItem::linkToCrud('Toutes les candidatures', 'fa fa-file-text', Candidacy::class);
     }
 }

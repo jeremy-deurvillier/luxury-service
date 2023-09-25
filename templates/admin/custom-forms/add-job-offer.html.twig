@@ -1,0 +1,80 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block content %}
+	<article class="content">
+		{{ form_start(form) }}
+		<section class="content-header">
+			<div class="content-header-title">
+				<h1 class="title">Ajouter une offre d'emploi ({{ client.companyName }})</h1>
+			</div>
+			<div class="page-actions">
+				<div class="page-actions">
+					<button type="submit" class="action-new btn btn-primary">Ajouter</button>
+				</div>
+			</div>
+		</section>
+		<section id="main" class="content-body">
+			{{ form_errors(form) }}
+			<div class="row">
+				<div class="col-md-6 col-xxl-5">
+					<div class="field-text form-group">
+						{{ form_label(form.active) }}
+						<div class="form-widget">
+							{{ form_widget(form.active) }}
+						</div>
+					</div>
+					<div class="field-text form-group">
+						{{ form_label(form.reference) }}
+						<div class="form-widget">
+							{{ form_widget(form.reference) }}
+						</div>
+					</div>
+					<div class="field-text form-group">
+						{{ form_label(form.jobCategory) }}
+						<div class="form-widget">
+							{{ form_widget(form.jobCategory) }}
+						</div>
+					</div>
+					<div class="field-text form-group">
+						{{ form_label(form.job) }}
+						<div class="form-widget">
+							{{ form_widget(form.job) }}
+						</div>
+					</div>
+					<div class="field-text form-group">
+						{{ form_label(form.type) }}
+						<div class="form-widget">
+							{{ form_widget(form.type) }}
+						</div>
+					</div>
+					<div class="field-text form-group">
+						{{ form_label(form.location) }}
+						<div class="form-widget">
+							{{ form_widget(form.location) }}
+						</div>
+					</div>
+					<div class="field-text form-group">
+						{{ form_label(form.salary) }}
+						<div class="form-widget">
+							{{ form_widget(form.salary) }}
+						</div>
+					</div>
+					<div class="field-text form-group">
+						{{ form_label(form.closingDate) }}
+						<div class="form-widget">
+							{{ form_widget(form.closingDate) }}
+						</div>
+					</div>
+					<div class="field-text form-group">
+						{{ form_label(form.notes) }}
+						<div class="form-widget">
+							{{ form_widget(form.notes) }}
+						</div>
+					</div>
+				</div>
+				<div class="flex-fill"></div>
+			</div>
+		</section>
+		{{ form_end(form) }}
+	</article>
+{% endblock %}
