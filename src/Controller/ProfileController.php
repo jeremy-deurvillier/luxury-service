@@ -30,7 +30,6 @@ class ProfileController extends AbstractController
         $rateCompletion = 0;
         $numberOfFieldsNoEmpty = 0;
 
-        //dd($this->getUser()->getCandidate());
         // Tableau pour lister les champs comptabilisés dans le pourcentage de complétion du formulaire.
         $userFields = [
             'firstname' => $user->getFirstName(),
