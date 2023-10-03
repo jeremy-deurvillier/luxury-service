@@ -65,6 +65,20 @@ class ProfileController extends AbstractController
                 $user->setAvatarFile($avatarNameFile);
             }
 
+            if ($form['cvFile']->getData()) {
+                $cvFile = $form['cvFile']->getData();
+                $cvNameFile = $this->uploadFile($cvFile, 'cv');
+
+                $user->setcvFile($cvNameFile);
+            }
+
+            if ($form['passportFile']->getData()) {
+                $passportFile = $form['passportFile']->getData();
+                $passportNameFile = $this->uploadFile($passportFile, 'passport');
+
+                $user->setPassportFile($passportNameFile);
+            }
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -86,7 +100,7 @@ class ProfileController extends AbstractController
         $extension = $file->guessExtension();
         $finalName = $prefixe . '-' . $name . '.' . $extension;
 
-        $file->move('uploads/avatars/', $finalName);
+        $file->move('uploads/' . $prefixe, $finalName);
 
         return $finalName;
     }

@@ -36,9 +36,9 @@ class CandidateType extends AbstractType
             ->add('dateOfBirth', BirthdayType::class, ['required' => false])
             ->add('placeOfBirth', TextType::class, ['required' => false])
             ->add('location', TextType::class, ['required' => false])
-            ->add('passportFile', FileType::class, ['required' => false])
+            ->add('passportFile', FileType::class, ['required' => false, 'mapped' => false])
             ->add('avatarFile', FileType::class, ['required' => false, 'mapped' => false])
-            ->add('cvFile', FileType::class, ['required' => false])
+            ->add('cvFile', FileType::class, ['required' => false, 'mapped' => false])
             ->add('experience', ChoiceType::class, [
                 'required' => false,
                 'choices'  => [
