@@ -43,10 +43,36 @@ class JobOfferController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_job_offer_show', methods: ['GET'])]
-    public function show(JobOffer $jobOffer): Response
+    public function show(JobOffer $jobOffer, JobOfferRepository $jobRepository): Response
     {
+        $allJobs = $jobRepository->findAll();
+
+        $currentItem = null;
+        $prevItem = null;
+        $nextItem = null;
+        $prevJobId = null;
+        $nextJobId = null;
+
+        foreach ($allJobs as $index => $job) {
+            if ($job->getId() === $jobOffer->getId()) {
+                $currentItem = $index;
+
+                break;
+            }
+        }
+
+        if ($currentItem !== null) {
+            $prevItem = ($currentItem > 0) ? $currentItem - 1 : count($allJobs) - 1;
+            $nextItem = ($currentItem < count($allJobs) - 1) ? $currentItem + 1 : 0;
+
+            $prevJobId = $allJobs[$prevItem]->getId();
+            $nextJobId = $allJobs[$nextItem]->getId();
+        }
+
         return $this->render('job_offer/show.html.twig', [
             'jobOffer' => $jobOffer,
+            'prevJob' => $prevJobId,
+            'nextJob' => $nextJobId
         ]);
     }
 
