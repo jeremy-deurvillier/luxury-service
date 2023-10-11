@@ -33,7 +33,7 @@ class CandidateType extends AbstractType
             ->add('address', TextType::class, ['required' => false])
             ->add('country', TextType::class, ['required' => false])
             ->add('nationality', TextType::class, ['required' => false])
-            ->add('dateOfBirth', BirthdayType::class, ['required' => false])
+            ->add('dateOfBirth', BirthdayType::class, ['required' => false, 'widget' => 'single_text'])
             ->add('placeOfBirth', TextType::class, ['required' => false])
             ->add('location', TextType::class, ['required' => false])
             ->add('passportFile', FileType::class, ['required' => false, 'mapped' => false])
