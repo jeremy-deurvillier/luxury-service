@@ -12,12 +12,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 class CandidateCrudController extends AbstractCrudController
 {
     private $sanitize = null;
 
-    public function mconstruct(HtmlSanitizerInterface $sanitize)
+    public function __construct(HtmlSanitizerInterface $sanitize)
     {
         $this->sanitize = $sanitize;
     }
